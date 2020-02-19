@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import axios from "axios";
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
-import Charts from "./components/Charts";
 import Navbar from "./components/Navbar";
 
 import "./styles.scss";
@@ -20,16 +19,16 @@ const App = () => {
       .then(res => setCoinData(res.data))
       .catch(err => console.log(err));
   }, []);
-  const getCoinsIds = () => {
-    return coinData?.map(coin => coin.id);
+  const parseCoinData = () => {
+    return coinData.map(coin => ({id: coin.id, name: coin.name}));
   }
   return (
     <div className="App">
-      <Navbar coinIds={getCoinsIds()} />
+      <Navbar coinData={parseCoinData()} />
       <Route path="/" render={() => <HomePage coinData={coinData} />} />
     </div>
   );
-};
+}
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
