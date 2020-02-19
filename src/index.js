@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 
 import "./styles.scss";
 import HomePage from "./components/HomePage";
+import CoinOverviewPage from "./components/CoinOverview";
 
 const App = () => {
   const [coinData, setCoinData] = useState([]);
@@ -25,7 +26,8 @@ const App = () => {
   return (
     <div className="App">
       <Navbar coinData={parseCoinData()} />
-      <Route path="/" render={() => <HomePage coinData={coinData} />} />
+      <Route exact path="/" render={() => <HomePage coinData={coinData} />} />
+      <Route exact path="/coins/:id" render={props => <CoinOverviewPage {...props} coinData={coinData.filter(coin => coin.id === props.match.params.id)} />} />
     </div>
   );
 }

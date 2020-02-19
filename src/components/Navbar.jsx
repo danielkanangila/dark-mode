@@ -28,27 +28,25 @@ const Navbar = ({coinData}) => {
 const Dropdown = ({coinData}) => {
   const [isToggled, setIsToggled] = useState(false);
   const handleClick = e => {
-    e.preventDefault();
     setIsToggled(!isToggled);
     document.querySelector('.dropdown__content').classList.toggle('show');
   }
   return(
     <div className="navbar__item dropdown">
-      <Link 
-        onClick={handleClick} 
-        to="/coins">
+      <div 
+        onClick={handleClick}>
           Coins 
           {!isToggled ? <span>&#x25BC;</span> : <span>&#x25B2;</span>}
-      </Link>
+      </div>
       <div className="dropdown__content">
-        {coinData.map(coin => <DropdownItem key={coin.id} {...coin} />)}
+        {coinData.map(coin => <DropdownItem handleClick={handleClick} key={coin.id} {...coin} />)}
       </div>
     </div>
   )
 }
 
-const DropdownItem = ({id, name}) => {
-  return <Link to={`coins/${id}`}>{name}</Link>
+const DropdownItem = ({id, name, handleClick}) => {
+  return <Link onClick={handleClick} to={`/coins/${id}`}>{name}</Link>
 }
 
 export default Navbar;
