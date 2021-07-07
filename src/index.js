@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
-import Charts from "./components/Charts";
 import Navbar from "./components/Navbar";
 
 import "./styles.scss";
+import HomePage from "./components/HomePage";
+import CoinOverviewPage from "./components/CoinOverview";
 
 const App = () => {
   const [coinData, setCoinData] = useState([]);
@@ -18,13 +20,21 @@ const App = () => {
       .then(res => setCoinData(res.data))
       .catch(err => console.log(err));
   }, []);
+  const parseCoinData = () => {
+    return coinData.map(coin => ({id: coin.id, name: coin.name}));
+  }
   return (
     <div className="App">
-      <Navbar />
-      <Charts coinData={coinData} />
+      <Navbar coinData={parseCoinData()} />
+      <Route exact path="/" render={() => <HomePage coinData={coinData} />} />
+      <Route exact path="/coins/:id" render={props => <CoinOverviewPage {...props} coinData={coinData.filter(coin => coin.id === props.match.params.id)} />} />
     </div>
   );
-};
+}
 
 const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+ReactDOM.render(
+  <Router>
+    <App />
+  </Router>,
+rootElement);
